@@ -32,7 +32,7 @@ class MainTabBarController: UITabBarController {
         formVC.tabBarItem = UITabBarItem(title: nil, image: UIImage(systemName: "envelope.fill"), tag: 2)
         
         setViewControllers([homeVC, qrVC, formVC], animated: false)
-        selectedIndex = 1 
+        selectedIndex = 0
     }
     
     private func setupCustomTabBar() {
