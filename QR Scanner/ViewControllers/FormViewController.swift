@@ -7,8 +7,8 @@
 
 import UIKit
 
-class FormViewController: UIViewController {
-        
+class FormViewController: UIViewController, UITextFieldDelegate {
+    
     private let scrollView = UIScrollView()
     private let contentView = UIView()
     
@@ -20,6 +20,8 @@ class FormViewController: UIViewController {
     private let emailTextField = UITextField()
     private let companyTextField = UITextField()
     private let inputTextField = UITextField()
+    
+    private var submitButtonBottomConstraint: NSLayoutConstraint?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -117,34 +119,34 @@ class FormViewController: UIViewController {
             textField.borderStyle = .roundedRect
             textField.backgroundColor = .clear
             textField.textColor = .white
+            textField.delegate = self
             textField.translatesAutoresizingMaskIntoConstraints = false
             contentView.addSubview(textField)
+            
+            textField.returnKeyType = .done
         }
         
         emailTextField.keyboardType = .emailAddress
-
+        
         let stackView = UIStackView(arrangedSubviews: textFields)
         stackView.axis = .vertical
         stackView.spacing = 16
         stackView.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(stackView)
         
-        // Set constraints for the stack view
         NSLayoutConstraint.activate([
             stackView.topAnchor.constraint(equalTo: label1.bottomAnchor, constant: 20),
             stackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
             stackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20)
         ])
         
-        // Set height constraints, but only once for each field
         nameTextField.heightAnchor.constraint(equalToConstant: 44).isActive = true
         emailTextField.heightAnchor.constraint(equalToConstant: 44).isActive = true
         companyTextField.heightAnchor.constraint(equalToConstant: 44).isActive = true
         
-        // Keep inputTextField larger as it's a message field
         inputTextField.heightAnchor.constraint(equalToConstant: 88).isActive = true
     }
-
+    
     
     private func createSubmitButton() {
         submitButton = UIButton(type: .system)
@@ -176,8 +178,10 @@ class FormViewController: UIViewController {
             submitButton.topAnchor.constraint(equalTo: inputTextField.bottomAnchor, constant: 30),
             submitButton.widthAnchor.constraint(equalToConstant: 120),
             submitButton.heightAnchor.constraint(equalToConstant: 50),
-            submitButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20)
         ])
+        
+        submitButtonBottomConstraint = submitButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20)
+        submitButtonBottomConstraint?.isActive = true
         
         submitButton.layoutIfNeeded()
         gradientLayer.frame = submitButton.bounds
@@ -272,7 +276,7 @@ class FormViewController: UIViewController {
     private func setupGesturesAndObservers() {
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         view.addGestureRecognizer(tapGesture)
-
+        
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
     }
@@ -282,10 +286,32 @@ class FormViewController: UIViewController {
     }
     
     @objc private func keyboardWillShow(notification: NSNotification) {
-        // Keyboard handling code
+        guard let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue else { return }
+        
+        let keyboardHeight = keyboardSize.height
+        let bottomPadding = view.safeAreaInsets.bottom
+        
+        submitButtonBottomConstraint?.constant = -keyboardHeight - 20 + bottomPadding
+        
+        let submitButtonBottom = submitButton.frame.origin.y + submitButton.frame.size.height + 20 // 20 is the bottom margin
+        let newContentOffset = CGPoint(x: 0, y: max(submitButtonBottom - scrollView.frame.size.height + keyboardHeight, 0))
+        
+        UIView.animate(withDuration: 0.3) {
+            self.view.layoutIfNeeded()
+            self.scrollView.setContentOffset(newContentOffset, animated: false)
+        }
     }
-
+    
     @objc private func keyboardWillHide(notification: NSNotification) {
-        // Keyboard handling code
+        submitButtonBottomConstraint?.constant = -20
+        
+        UIView.animate(withDuration: 0.3) {
+            self.view.layoutIfNeeded()
+        }
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
     }
 }
