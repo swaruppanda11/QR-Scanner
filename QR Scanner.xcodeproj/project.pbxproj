@@ -17,10 +17,8 @@
 		A99B6F642CB0089B0055CFC4 /* QRViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A99B6F632CB0089B0055CFC4 /* QRViewController.swift */; };
 		A99B6F672CB0090E0055CFC4 /* FormViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A99B6F662CB0090E0055CFC4 /* FormViewController.swift */; };
 		A99B6F6A2CB00B510055CFC4 /* CustomTabBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = A99B6F692CB00B510055CFC4 /* CustomTabBar.swift */; };
-		A99B6F6D2CB1319C0055CFC4 /* StepView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A99B6F6C2CB1319C0055CFC4 /* StepView.swift */; };
 		A99B6F6F2CB135D60055CFC4 /* FeatureRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A99B6F6E2CB135D60055CFC4 /* FeatureRowView.swift */; };
 		A99B6F712CB136DF0055CFC4 /* SeparatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A99B6F702CB136DF0055CFC4 /* SeparatorView.swift */; };
-		A99B6F742CB198D50055CFC4 /* video.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = A99B6F732CB198D50055CFC4 /* video.mp4 */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -36,10 +34,8 @@
 		A99B6F632CB0089B0055CFC4 /* QRViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRViewController.swift; sourceTree = "<group>"; };
 		A99B6F662CB0090E0055CFC4 /* FormViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormViewController.swift; sourceTree = "<group>"; };
 		A99B6F692CB00B510055CFC4 /* CustomTabBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTabBar.swift; sourceTree = "<group>"; };
-		A99B6F6C2CB1319C0055CFC4 /* StepView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StepView.swift; sourceTree = "<group>"; };
 		A99B6F6E2CB135D60055CFC4 /* FeatureRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeatureRowView.swift; sourceTree = "<group>"; };
 		A99B6F702CB136DF0055CFC4 /* SeparatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeparatorView.swift; sourceTree = "<group>"; };
-		A99B6F732CB198D50055CFC4 /* video.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; name = video.mp4; path = ../../../Downloads/video.mp4; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -82,7 +78,6 @@
 				A99B6F522CB002860055CFC4 /* Assets.xcassets */,
 				A99B6F542CB002860055CFC4 /* LaunchScreen.storyboard */,
 				A99B6F572CB002860055CFC4 /* Info.plist */,
-				A99B6F732CB198D50055CFC4 /* video.mp4 */,
 			);
 			path = "QR Scanner";
 			sourceTree = "<group>";
@@ -116,7 +111,6 @@
 		A99B6F6B2CB131520055CFC4 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				A99B6F6C2CB1319C0055CFC4 /* StepView.swift */,
 				A99B6F6E2CB135D60055CFC4 /* FeatureRowView.swift */,
 				A99B6F702CB136DF0055CFC4 /* SeparatorView.swift */,
 			);
@@ -184,7 +178,6 @@
 				A99B6F532CB002860055CFC4 /* Assets.xcassets in Resources */,
 				A99B6F562CB002860055CFC4 /* Base in Resources */,
 				A99B6F512CB002850055CFC4 /* Base in Resources */,
-				A99B6F742CB198D50055CFC4 /* video.mp4 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -201,7 +194,6 @@
 				A99B6F672CB0090E0055CFC4 /* FormViewController.swift in Sources */,
 				A99B6F4A2CB002850055CFC4 /* AppDelegate.swift in Sources */,
 				A99B6F6A2CB00B510055CFC4 /* CustomTabBar.swift in Sources */,
-				A99B6F6D2CB1319C0055CFC4 /* StepView.swift in Sources */,
 				A99B6F5E2CB004500055CFC4 /* TabBarController.swift in Sources */,
 				A99B6F4C2CB002850055CFC4 /* SceneDelegate.swift in Sources */,
 				A99B6F642CB0089B0055CFC4 /* QRViewController.swift in Sources */,
