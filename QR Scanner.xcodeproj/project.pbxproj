@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A9509ECF2CEC8F5100AD02D3 /* HorizontalButtonCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9509ECE2CEC8F5100AD02D3 /* HorizontalButtonCell.swift */; };
 		A99B6F4A2CB002850055CFC4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A99B6F492CB002850055CFC4 /* AppDelegate.swift */; };
 		A99B6F4C2CB002850055CFC4 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A99B6F4B2CB002850055CFC4 /* SceneDelegate.swift */; };
 		A99B6F512CB002850055CFC4 /* Base in Resources */ = {isa = PBXBuildFile; fileRef = A99B6F502CB002850055CFC4 /* Base */; };
@@ -22,6 +23,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		A9509ECE2CEC8F5100AD02D3 /* HorizontalButtonCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HorizontalButtonCell.swift; sourceTree = "<group>"; };
 		A99B6F462CB002850055CFC4 /* QR Scanner.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "QR Scanner.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A99B6F492CB002850055CFC4 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A99B6F4B2CB002850055CFC4 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -113,6 +115,7 @@
 			children = (
 				A99B6F6E2CB135D60055CFC4 /* FeatureRowView.swift */,
 				A99B6F702CB136DF0055CFC4 /* SeparatorView.swift */,
+				A9509ECE2CEC8F5100AD02D3 /* HorizontalButtonCell.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -189,6 +192,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A99B6F712CB136DF0055CFC4 /* SeparatorView.swift in Sources */,
+				A9509ECF2CEC8F5100AD02D3 /* HorizontalButtonCell.swift in Sources */,
 				A99B6F622CB008880055CFC4 /* HomeViewController.swift in Sources */,
 				A99B6F6F2CB135D60055CFC4 /* FeatureRowView.swift in Sources */,
 				A99B6F672CB0090E0055CFC4 /* FormViewController.swift in Sources */,

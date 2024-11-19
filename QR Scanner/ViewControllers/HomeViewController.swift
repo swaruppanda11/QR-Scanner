@@ -7,23 +7,29 @@
 
 import UIKit
 
-class HomeViewController: UIViewController {
+class HomeViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     
     let scrollView = UIScrollView()
     let contentView = UIView()
     
     let companyName = UILabel()
     let qrButton = UIButton()
-        
+    let centerImage = UIImageView()
+    let centerImage2 = UIImageView()
+    
+    private var collectionView: UICollectionView!
+    private let buttonTitles = ["AR", "CGI", "Web Apps", "VR", "Other", "Testing"]
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationController?.setNavigationBarHidden(true, animated: false)
-        addGradientWithBlackBackground()
         setupScrollView()
         setupContentView()
         companyLabel()
         setupQRScannerButton()
+        horizontalScrollView()
+        setupFirstImageView()
+        setupSecondImageView()
     }
     
     func setupScrollView() {
@@ -49,8 +55,6 @@ class HomeViewController: UIViewController {
             contentView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
             contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor)
         ])
-        
-        contentView.heightAnchor.constraint(greaterThanOrEqualTo: view.heightAnchor).isActive = true
     }
     
     private func companyLabel() {
@@ -69,7 +73,7 @@ class HomeViewController: UIViewController {
         contentView.addSubview(companyName)
         
         NSLayoutConstraint.activate([
-            companyName.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 70),
+            companyName.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 50),
             companyName.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 30),
         ])
     }
@@ -77,50 +81,106 @@ class HomeViewController: UIViewController {
     private func setupQRScannerButton() {
         qrButton.setImage(UIImage(systemName: "qrcode.viewfinder"), for: .normal)
         qrButton.tintColor = .white
-        
         qrButton.backgroundColor = .systemGray6
         qrButton.layer.cornerRadius = 27.5
         qrButton.clipsToBounds = true
         qrButton.imageView?.contentMode = .scaleAspectFill
-        
         qrButton.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(qrButton)
         
         NSLayoutConstraint.activate([
             qrButton.widthAnchor.constraint(equalToConstant: 55),
             qrButton.heightAnchor.constraint(equalToConstant: 55),
-            qrButton.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 80),
+            qrButton.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 60),
             qrButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -30)
         ])
         
         qrButton.addTarget(self, action: #selector(didTapQRScanner), for: .touchUpInside)
     }
-
+    
     @objc private func didTapQRScanner() {
         let qrViewController = QRViewController()
-        qrViewController.modalPresentationStyle = .fullScreen
-        navigationController?.pushViewController(qrViewController, animated: true)
+        present(qrViewController, animated: true)
     }
+    
+    private func horizontalScrollView() {
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .horizontal
+        layout.minimumLineSpacing = 16
+        layout.sectionInset = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)
+        
+        collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        collectionView.delegate = self
+        collectionView.dataSource = self
+        collectionView.backgroundColor = .clear
+        collectionView.showsHorizontalScrollIndicator = false
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
+        
+        collectionView.register(HorizontalButtonCell.self, forCellWithReuseIdentifier: "HorizontalButtonCell")
+        
+        contentView.addSubview(collectionView)
+        
+        NSLayoutConstraint.activate([
+            collectionView.topAnchor.constraint(equalTo: companyName.bottomAnchor, constant: 20),
+            collectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 0),
+            collectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: 0),
+            collectionView.heightAnchor.constraint(equalToConstant: 50)
+        ])
+    }
+    
+    private func setupFirstImageView() {
+        centerImage.image = UIImage(named: "filter")
+        centerImage.contentMode = .scaleAspectFill
+        centerImage.layer.cornerRadius = 45
+        centerImage.clipsToBounds = true
+        centerImage.translatesAutoresizingMaskIntoConstraints = false
+            
+        contentView.addSubview(centerImage)
 
+        NSLayoutConstraint.activate([
+            centerImage.topAnchor.constraint(equalTo: collectionView.bottomAnchor, constant: 20),
+            centerImage.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 15),
+            centerImage.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -15),
+            centerImage.heightAnchor.constraint(equalToConstant: 500)
+        ])
+    }
+    
+    private func setupSecondImageView() {
+        centerImage2.image = UIImage(named: "filter")
+        centerImage2.contentMode = .scaleAspectFill
+        centerImage2.layer.cornerRadius = 45
+        centerImage2.clipsToBounds = true
+        centerImage2.translatesAutoresizingMaskIntoConstraints = false
+            
+        contentView.addSubview(centerImage2)
 
-    private func addGradientWithBlackBackground() {
-        let gradientLayer = CAGradientLayer()
-        
-        gradientLayer.colors = [
-            UIColor.systemPink.withAlphaComponent(0.7).cgColor,
-            UIColor.black.cgColor,
-            UIColor.black.cgColor,
-            UIColor.purple.withAlphaComponent(0.7).cgColor
-        ]
-        
-        gradientLayer.locations = [0.0, 0.2, 0.8, 1.0]
-        gradientLayer.startPoint = CGPoint(x: 0.0, y: 1.0)
-        gradientLayer.endPoint = CGPoint(x: 1.0, y: 0.0)
-        gradientLayer.frame = view.bounds
-        
-        view.layer.addSublayer(gradientLayer)
+        NSLayoutConstraint.activate([
+            centerImage2.topAnchor.constraint(equalTo: centerImage.bottomAnchor, constant: 20),
+            centerImage2.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 15),
+            centerImage2.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -15),
+            centerImage2.heightAnchor.constraint(equalToConstant: 500),
+            centerImage2.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+            centerImage2.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: 120)
+        ])
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return buttonTitles.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "HorizontalButtonCell", for: indexPath) as! HorizontalButtonCell
+        cell.configure(with: buttonTitles[indexPath.item])
+        return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let title = buttonTitles[indexPath.item]
+        let width = title.size(withAttributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 16)]).width + 32
+        return CGSize(width: width, height: 45)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        print("\(buttonTitles[indexPath.item]) tapped")
     }
 }
-
-
-

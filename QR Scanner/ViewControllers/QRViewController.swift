@@ -65,10 +65,19 @@ class QRViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate
         // Add the scanner overlay with animated scanning corners
         addScannerOverlay()
 
-        // Start the capture session on a background thread
         DispatchQueue.global(qos: .userInitiated).async {
             self.captureSession.startRunning()
         }
+                    
+        navigationItem.leftBarButtonItem = UIBarButtonItem(
+                barButtonSystemItem: .close,
+                target: self,
+                action: #selector(dismissViewController)
+            )
+    }
+    
+    @objc private func dismissViewController() {
+        dismiss(animated: true)
     }
 
     // Function to add the animated scanner overlay with only the corners visible
