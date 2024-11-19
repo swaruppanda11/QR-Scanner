@@ -23,6 +23,7 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationController?.setNavigationBarHidden(true, animated: false)
+        view.backgroundColor = .black
         setupScrollView()
         setupContentView()
         companyLabel()
@@ -81,7 +82,7 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
     private func setupQRScannerButton() {
         qrButton.setImage(UIImage(systemName: "qrcode.viewfinder"), for: .normal)
         qrButton.tintColor = .white
-        qrButton.backgroundColor = .systemGray6
+        qrButton.backgroundColor = .darkGray
         qrButton.layer.cornerRadius = 27.5
         qrButton.clipsToBounds = true
         qrButton.imageView?.contentMode = .scaleAspectFill
