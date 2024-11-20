@@ -35,13 +35,13 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
             "https://raw.githubusercontent.com/adibkn1/FlappyBird/refs/heads/main/4.png"
         ],
         "Web Apps": [
-            "https://raw.githubusercontent.com/adibkn1/FlappyBird/refs/heads/main/1.png",
+            "https://raw.githubusercontent.com/adibkn1/FlappyBird/refs/heads/main/3.png",
             "https://raw.githubusercontent.com/adibkn1/FlappyBird/refs/heads/main/2.png",
             "https://raw.githubusercontent.com/adibkn1/FlappyBird/refs/heads/main/3.png",
             "https://raw.githubusercontent.com/adibkn1/FlappyBird/refs/heads/main/4.png"
         ],
         "AI": [
-            "https://raw.githubusercontent.com/adibkn1/FlappyBird/refs/heads/main/1.png",
+            "https://raw.githubusercontent.com/adibkn1/FlappyBird/refs/heads/main/4.png",
             "https://raw.githubusercontent.com/adibkn1/FlappyBird/refs/heads/main/2.png",
             "https://raw.githubusercontent.com/adibkn1/FlappyBird/refs/heads/main/3.png",
             "https://raw.githubusercontent.com/adibkn1/FlappyBird/refs/heads/main/4.png"
@@ -180,7 +180,6 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
     }
     
     private func updateImageViews(for category: String) {
-        // Remove ALL existing subviews from the container
         imageContainerView.subviews.forEach { $0.removeFromSuperview() }
         imageViews.removeAll()
         
@@ -211,10 +210,10 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
         imageView.tintColor = .gray
         
         let infoButton = UIButton(type: .system)
-        infoButton.setImage(UIImage(systemName: "arrow.right"), for: .normal)
-        infoButton.tintColor = UIColor.white
-        infoButton.backgroundColor = UIColor(red: 169/255, green: 169/255, blue: 169/255, alpha: 0.8)
-        infoButton.layer.cornerRadius = 25
+        infoButton.setImage(UIImage(systemName: "chevron.forward"), for: .normal)
+        infoButton.tintColor = UIColor.black
+        infoButton.backgroundColor = UIColor(red: 1.0, green: 1.0, blue: 0.5, alpha: 1)
+        infoButton.layer.cornerRadius = 30
         infoButton.translatesAutoresizingMaskIntoConstraints = false
         
         let buttonLabel = UILabel()
@@ -222,9 +221,7 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
         buttonLabel.textColor = .white
         buttonLabel.textAlignment = .left
         buttonLabel.numberOfLines = 2
-        buttonLabel.font = UIFont.systemFont(ofSize: 24, weight: .semibold)
-        buttonLabel.backgroundColor = UIColor(red: 169/255, green: 169/255, blue: 169/255, alpha: 1)
-        buttonLabel.layer.cornerRadius = 18
+        buttonLabel.font = UIFont.systemFont(ofSize: 30, weight: .semibold)
         buttonLabel.clipsToBounds = true
         buttonLabel.translatesAutoresizingMaskIntoConstraints = false
 
@@ -242,12 +239,12 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
             imageView.topAnchor.constraint(equalTo: anchor ?? containerView.topAnchor, constant: 20),
             imageView.heightAnchor.constraint(equalToConstant: 500),
             
-            infoButton.widthAnchor.constraint(equalToConstant: 70),
-            infoButton.heightAnchor.constraint(equalToConstant: 52),
+            infoButton.widthAnchor.constraint(equalToConstant: 60),
+            infoButton.heightAnchor.constraint(equalToConstant: 60),
             infoButton.bottomAnchor.constraint(equalTo: imageView.bottomAnchor, constant: -20),
             infoButton.trailingAnchor.constraint(equalTo: imageView.trailingAnchor, constant: -20),
             
-            buttonLabel.bottomAnchor.constraint(equalTo: imageView.bottomAnchor, constant: -22),
+            buttonLabel.bottomAnchor.constraint(equalTo: imageView.bottomAnchor, constant: -25),
             buttonLabel.leadingAnchor.constraint(equalTo: imageView.leadingAnchor, constant: 20),
             buttonLabel.heightAnchor.constraint(equalToConstant: 50)
         ])
