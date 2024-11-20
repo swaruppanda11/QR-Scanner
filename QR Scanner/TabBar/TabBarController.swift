@@ -26,8 +26,8 @@ class MainTabBarController: UITabBarController {
         let homeVC = HomeViewController()
         let formVC = FormViewController()
         
-        homeVC.tabBarItem = UITabBarItem(title: "Explore", image: UIImage(systemName: "globe"), tag: 0)
-        formVC.tabBarItem = UITabBarItem(title: "Contact Us", image: UIImage(systemName: "ellipsis.message"), tag: 1)
+        homeVC.tabBarItem = UITabBarItem(title: nil, image: UIImage(systemName: "globe"), tag: 0)
+        formVC.tabBarItem = UITabBarItem(title: nil, image: UIImage(systemName: "ellipsis.message"), tag: 1)
         
         homeVC.tabBarItem.imageInsets = UIEdgeInsets(top: -10, left: 0, bottom: 100, right: 0)
             formVC.tabBarItem.imageInsets = UIEdgeInsets(top: -10, left: 0, bottom: 100, right: 0)
@@ -45,7 +45,7 @@ class MainTabBarController: UITabBarController {
             customTabBar.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 80),
             customTabBar.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -80),
             customTabBar.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
-            customTabBar.heightAnchor.constraint(equalToConstant: 62)
+            customTabBar.heightAnchor.constraint(equalToConstant: 60)
         ])
         
         customTabBar.items = viewControllers?.map { $0.tabBarItem }

@@ -14,8 +14,6 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
     
     let companyName = UILabel()
     let qrButton = UIButton()
-    let centerImage = UIImageView()
-    let centerImage2 = UIImageView()
     
     private var collectionView: UICollectionView!
     private let buttonTitles = ["AR", "CGI", "Web Apps", "VR", "Other", "Testing"]
@@ -29,8 +27,7 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
         companyLabel()
         setupQRScannerButton()
         horizontalScrollView()
-        setupFirstImageView()
-        setupSecondImageView()
+        setupImageViews()
     }
     
     func setupScrollView() {
@@ -85,7 +82,6 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
         qrButton.backgroundColor = .darkGray
         qrButton.layer.cornerRadius = 27.5
         qrButton.clipsToBounds = true
-        qrButton.imageView?.contentMode = .scaleAspectFill
         qrButton.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(qrButton)
         
@@ -123,46 +119,64 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
         
         NSLayoutConstraint.activate([
             collectionView.topAnchor.constraint(equalTo: companyName.bottomAnchor, constant: 20),
-            collectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 0),
-            collectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: 0),
+            collectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            collectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             collectionView.heightAnchor.constraint(equalToConstant: 50)
         ])
     }
     
-    private func setupFirstImageView() {
-        centerImage.image = UIImage(named: "filter")
-        centerImage.contentMode = .scaleAspectFill
-        centerImage.layer.cornerRadius = 45
-        centerImage.clipsToBounds = true
-        centerImage.translatesAutoresizingMaskIntoConstraints = false
-            
-        contentView.addSubview(centerImage)
-
+    private func addImageView(with urlString: String, below anchor: NSLayoutYAxisAnchor?) -> UIImageView {
+        let imageView = UIImageView()
+        imageView.contentMode = .scaleAspectFill
+        imageView.layer.cornerRadius = 45
+        imageView.clipsToBounds = true
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        
+        contentView.addSubview(imageView)
+        
+        if let url = URL(string: urlString) {
+            DispatchQueue.global().async {
+                if let data = try? Data(contentsOf: url), let image = UIImage(data: data) {
+                    DispatchQueue.main.async {
+                        imageView.image = image
+                    }
+                }
+            }
+        }
+        
         NSLayoutConstraint.activate([
-            centerImage.topAnchor.constraint(equalTo: collectionView.bottomAnchor, constant: 20),
-            centerImage.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 15),
-            centerImage.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -15),
-            centerImage.heightAnchor.constraint(equalToConstant: 500)
+            imageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 15),
+            imageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -15),
+            imageView.heightAnchor.constraint(equalToConstant: 500)
         ])
+        
+        if let anchor = anchor {
+            imageView.topAnchor.constraint(equalTo: anchor, constant: 20).isActive = true
+        } else {
+            imageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20).isActive = true
+        }
+        
+        return imageView
     }
     
-    private func setupSecondImageView() {
-        centerImage2.image = UIImage(named: "filter")
-        centerImage2.contentMode = .scaleAspectFill
-        centerImage2.layer.cornerRadius = 45
-        centerImage2.clipsToBounds = true
-        centerImage2.translatesAutoresizingMaskIntoConstraints = false
-            
-        contentView.addSubview(centerImage2)
-
-        NSLayoutConstraint.activate([
-            centerImage2.topAnchor.constraint(equalTo: centerImage.bottomAnchor, constant: 20),
-            centerImage2.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 15),
-            centerImage2.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -15),
-            centerImage2.heightAnchor.constraint(equalToConstant: 500),
-            centerImage2.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-            centerImage2.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: 120)
-        ])
+    private func setupImageViews() {
+        var lastAnchor: NSLayoutYAxisAnchor? = collectionView.bottomAnchor
+        
+        let imageUrls = [
+            "https://raw.githubusercontent.com/adibkn1/FlappyBird/refs/heads/main/1.png",
+            "https://raw.githubusercontent.com/adibkn1/FlappyBird/refs/heads/main/2.png",
+            "https://raw.githubusercontent.com/adibkn1/FlappyBird/refs/heads/main/3.png",
+            "https://raw.githubusercontent.com/adibkn1/FlappyBird/refs/heads/main/4.png"
+        ]
+        
+        for url in imageUrls {
+            let imageView = addImageView(with: url, below: lastAnchor)
+            lastAnchor = imageView.bottomAnchor
+        }
+        
+        if let lastAnchor = lastAnchor {
+            contentView.bottomAnchor.constraint(equalTo: lastAnchor, constant: 30).isActive = true
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
