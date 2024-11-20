@@ -13,7 +13,7 @@ class HorizontalButtonCell: UICollectionViewCell {
         let label = UILabel()
         label.textColor = .white
         label.textAlignment = .center
-        label.font = UIFont.systemFont(ofSize: 16, weight: .medium)
+        label.font = UIFont.systemFont(ofSize: 16, weight: .heavy)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()

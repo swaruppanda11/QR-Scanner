@@ -30,7 +30,7 @@ class MainTabBarController: UITabBarController {
         formVC.tabBarItem = UITabBarItem(title: nil, image: UIImage(systemName: "ellipsis.message"), tag: 1)
         
         homeVC.tabBarItem.imageInsets = UIEdgeInsets(top: -10, left: 0, bottom: 100, right: 0)
-            formVC.tabBarItem.imageInsets = UIEdgeInsets(top: -10, left: 0, bottom: 100, right: 0)
+        formVC.tabBarItem.imageInsets = UIEdgeInsets(top: -10, left: 0, bottom: 100, right: 0)
         
         setViewControllers([homeVC, formVC], animated: false)
         selectedIndex = 0
@@ -42,8 +42,8 @@ class MainTabBarController: UITabBarController {
         
         customTabBar.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            customTabBar.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 80),
-            customTabBar.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -80),
+            customTabBar.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 120),
+            customTabBar.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -120),
             customTabBar.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
             customTabBar.heightAnchor.constraint(equalToConstant: 60)
         ])

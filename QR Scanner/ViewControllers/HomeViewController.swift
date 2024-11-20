@@ -19,6 +19,38 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
     private let buttonTitles = ["AR", "CGI", "Web Apps", "AI"]
     private var selectedIndex: IndexPath?
     
+    private let imageCache = NSCache<NSString, UIImage>()
+    
+    private let imageUrlsForButtons: [String: [String]] = [
+        "AR": [
+            "https://raw.githubusercontent.com/adibkn1/FlappyBird/refs/heads/main/1.png",
+            "https://raw.githubusercontent.com/adibkn1/FlappyBird/refs/heads/main/2.png",
+            "https://raw.githubusercontent.com/adibkn1/FlappyBird/refs/heads/main/3.png",
+            "https://raw.githubusercontent.com/adibkn1/FlappyBird/refs/heads/main/4.png"
+        ],
+        "CGI": [
+            "https://raw.githubusercontent.com/adibkn1/FlappyBird/refs/heads/main/1.png",
+            "https://raw.githubusercontent.com/adibkn1/FlappyBird/refs/heads/main/2.png",
+            "https://raw.githubusercontent.com/adibkn1/FlappyBird/refs/heads/main/3.png",
+            "https://raw.githubusercontent.com/adibkn1/FlappyBird/refs/heads/main/4.png"
+        ],
+        "Web Apps": [
+            "https://raw.githubusercontent.com/adibkn1/FlappyBird/refs/heads/main/1.png",
+            "https://raw.githubusercontent.com/adibkn1/FlappyBird/refs/heads/main/2.png",
+            "https://raw.githubusercontent.com/adibkn1/FlappyBird/refs/heads/main/3.png",
+            "https://raw.githubusercontent.com/adibkn1/FlappyBird/refs/heads/main/4.png"
+        ],
+        "AI": [
+            "https://raw.githubusercontent.com/adibkn1/FlappyBird/refs/heads/main/1.png",
+            "https://raw.githubusercontent.com/adibkn1/FlappyBird/refs/heads/main/2.png",
+            "https://raw.githubusercontent.com/adibkn1/FlappyBird/refs/heads/main/3.png",
+            "https://raw.githubusercontent.com/adibkn1/FlappyBird/refs/heads/main/4.png"
+        ]
+    ]
+    
+    private var imageContainerView: UIView!
+    private var imageViews: [UIImageView] = []
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -30,9 +62,9 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
         setupCompanyLabel()
         setupQRScannerButton()
         setupHorizontalScrollView()
+        setupImageViews()
         
-        // Set AR button as selected by default
-        let defaultIndex = IndexPath(item: 0, section: 0) // AR button is at index 0
+        let defaultIndex = IndexPath(item: 0, section: 0)
         selectedIndex = defaultIndex
         collectionView.selectItem(at: defaultIndex, animated: false, scrollPosition: .centeredHorizontally)
         collectionView.reloadData()
@@ -129,11 +161,131 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
             collectionView.topAnchor.constraint(equalTo: companyName.bottomAnchor, constant: 20),
             collectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             collectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            collectionView.heightAnchor.constraint(equalToConstant: 50),
-            collectionView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20)
+            collectionView.heightAnchor.constraint(equalToConstant: 50)
         ])
     }
     
+    private func setupImageViews() {
+        imageContainerView = UIView()
+        imageContainerView.translatesAutoresizingMaskIntoConstraints = false
+        contentView.addSubview(imageContainerView)
+        
+        NSLayoutConstraint.activate([
+            imageContainerView.topAnchor.constraint(equalTo: collectionView.bottomAnchor, constant: 20),
+            imageContainerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            imageContainerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor)
+        ])
+        
+        updateImageViews(for: "AR")
+    }
+    
+    private func updateImageViews(for category: String) {
+        imageViews.forEach { $0.removeFromSuperview() }
+        imageViews.removeAll()
+        
+        guard let imageUrls = imageUrlsForButtons[category] else { return }
+        
+        var lastAnchor: NSLayoutYAxisAnchor? = imageContainerView.topAnchor
+        
+        for url in imageUrls {
+            let imageView = addImageView(with: url, below: lastAnchor, in: imageContainerView)
+            imageViews.append(imageView)
+            lastAnchor = imageView.bottomAnchor
+        }
+        
+        if let lastAnchor = lastAnchor {
+            imageContainerView.bottomAnchor.constraint(equalTo: lastAnchor, constant: 20).isActive = true
+            contentView.bottomAnchor.constraint(equalTo: imageContainerView.bottomAnchor, constant: 20).isActive = true
+        }
+    }
+    
+    private func addImageView(with urlString: String, below anchor: NSLayoutYAxisAnchor?, in containerView: UIView) -> UIImageView {
+        let imageView = UIImageView()
+        imageView.contentMode = .scaleAspectFill
+        imageView.layer.cornerRadius = 30
+        imageView.clipsToBounds = true
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        
+        imageView.image = UIImage(systemName: "photo.fill")
+        imageView.tintColor = .gray
+        
+        let infoButton = UIButton(type: .system)
+        infoButton.setImage(UIImage(systemName: "arrow.right"), for: .normal)
+        infoButton.tintColor = UIColor.white
+        infoButton.backgroundColor = UIColor(red: 169/255, green: 169/255, blue: 169/255, alpha: 0.8)
+        infoButton.layer.cornerRadius = 25
+        infoButton.translatesAutoresizingMaskIntoConstraints = false
+        
+        let buttonLabel = UILabel()
+        buttonLabel.text = "  Instagram Filters  "
+        buttonLabel.textColor = .white
+        buttonLabel.textAlignment = .left
+        buttonLabel.numberOfLines = 2
+        buttonLabel.font = UIFont.systemFont(ofSize: 24, weight: .semibold)
+        buttonLabel.backgroundColor = UIColor(red: 169/255, green: 169/255, blue: 169/255, alpha: 0.8)
+        buttonLabel.layer.cornerRadius = 18
+        buttonLabel.clipsToBounds = true
+        buttonLabel.translatesAutoresizingMaskIntoConstraints = false
+
+        
+        infoButton.addTarget(self, action: #selector(openWikipediaLink), for: .touchUpInside)
+        
+        containerView.addSubview(imageView)
+        containerView.addSubview(infoButton)
+        containerView.addSubview(buttonLabel)
+
+        
+        NSLayoutConstraint.activate([
+            imageView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 15),
+            imageView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -15),
+            imageView.topAnchor.constraint(equalTo: anchor ?? containerView.topAnchor, constant: 20),
+            imageView.heightAnchor.constraint(equalToConstant: 500),
+            
+            infoButton.widthAnchor.constraint(equalToConstant: 70),
+            infoButton.heightAnchor.constraint(equalToConstant: 52),
+            infoButton.bottomAnchor.constraint(equalTo: imageView.bottomAnchor, constant: -20),
+            infoButton.trailingAnchor.constraint(equalTo: imageView.trailingAnchor, constant: -20),
+            
+            buttonLabel.bottomAnchor.constraint(equalTo: imageView.bottomAnchor, constant: -22),
+            buttonLabel.leadingAnchor.constraint(equalTo: imageView.leadingAnchor, constant: 20),
+            buttonLabel.heightAnchor.constraint(equalToConstant: 50)
+        ])
+        
+        if let anchor = anchor {
+            imageView.topAnchor.constraint(equalTo: anchor, constant: 20).isActive = true
+        } else {
+            imageView.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 20).isActive = true
+        }
+        
+        if let cachedImage = imageCache.object(forKey: urlString as NSString) {
+            imageView.image = cachedImage
+            return imageView
+        }
+        
+        guard let url = URL(string: urlString) else { return imageView }
+        
+        URLSession.shared.dataTask(with: url) { [weak self] (data, response, error) in
+            guard let data = data,
+                  let image = UIImage(data: data),
+                  error == nil else { return }
+            
+            self?.imageCache.setObject(image, forKey: urlString as NSString)
+            
+            DispatchQueue.main.async {
+                imageView.image = image
+            }
+        }.resume()
+        
+        return imageView
+    }
+    
+    @objc private func openWikipediaLink() {
+        guard let url = URL(string: "https://en.wikipedia.org/wiki/Augmented_reality") else { return }
+        
+        if UIApplication.shared.canOpenURL(url) {
+            UIApplication.shared.open(url, options: [:], completionHandler: nil)
+        }
+    }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return buttonTitles.count
@@ -146,14 +298,28 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let title = buttonTitles[indexPath.item]
-        let width = title.size(withAttributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 16)]).width + 32
-        return CGSize(width: width, height: 45)
+        let widestWidth = buttonTitles.map { title in
+            title.size(withAttributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 16)]).width + 32
+        }.max() ?? 100
+        
+        return CGSize(width: widestWidth, height: 45)
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if selectedIndex != indexPath {
             selectedIndex = indexPath
+            let selectedCategory = buttonTitles[indexPath.item]
+            
+            UIView.transition(with: imageContainerView,
+                              duration: 0.5,
+                              options: .transitionCrossDissolve,
+                              animations: {
+                self.imageViews.forEach { $0.removeFromSuperview() }
+                self.imageViews.removeAll()
+                
+                self.updateImageViews(for: selectedCategory)
+            }, completion: nil)
+            
             collectionView.reloadData()
         }
         print("\(buttonTitles[indexPath.item]) tapped")

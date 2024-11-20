@@ -26,6 +26,8 @@ class FormViewController: UIViewController, UITextFieldDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        view.backgroundColor = .black
         setupScrollView()
         setupUI()
         setupGesturesAndObservers()
@@ -117,9 +119,13 @@ class FormViewController: UIViewController, UITextFieldDelegate {
     private func setupTextFields() {
         let textFields = [nameTextField, emailTextField, companyTextField, inputTextField]
         let placeholders = ["Name", "Email", "Company", "Message"]
+        let placeholderAttributes: [NSAttributedString.Key: Any] = [
+            .foregroundColor: UIColor.white  
+        ]
         
         for (index, textField) in textFields.enumerated() {
             textField.placeholder = placeholders[index]
+            textField.attributedPlaceholder = NSAttributedString(string: textField.placeholder ?? "", attributes: placeholderAttributes)
             textField.borderStyle = .roundedRect
             textField.backgroundColor = UIColor(red: 35/255, green: 45/255, blue: 60/255, alpha: 1.0)
             textField.textColor = .white
