@@ -16,7 +16,7 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
     let qrButton = UIButton()
     
     private var collectionView: UICollectionView!
-    private let buttonTitles = ["AR", "CGI", "Web Apps", "VR", "Other", "Testing"]
+    private let buttonTitles = ["AR", "CGI", "Web Apps", "AI"]
     
     override func viewDidLoad() {
         super.viewDidLoad()
