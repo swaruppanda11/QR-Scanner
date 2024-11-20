@@ -29,7 +29,7 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
             "https://raw.githubusercontent.com/adibkn1/FlappyBird/refs/heads/main/4.png"
         ],
         "CGI": [
-            "https://raw.githubusercontent.com/adibkn1/FlappyBird/refs/heads/main/1.png",
+            "https://raw.githubusercontent.com/adibkn1/FlappyBird/refs/heads/main/2.png",
             "https://raw.githubusercontent.com/adibkn1/FlappyBird/refs/heads/main/2.png",
             "https://raw.githubusercontent.com/adibkn1/FlappyBird/refs/heads/main/3.png",
             "https://raw.githubusercontent.com/adibkn1/FlappyBird/refs/heads/main/4.png"
@@ -180,7 +180,8 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
     }
     
     private func updateImageViews(for category: String) {
-        imageViews.forEach { $0.removeFromSuperview() }
+        // Remove ALL existing subviews from the container
+        imageContainerView.subviews.forEach { $0.removeFromSuperview() }
         imageViews.removeAll()
         
         guard let imageUrls = imageUrlsForButtons[category] else { return }
@@ -222,7 +223,7 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
         buttonLabel.textAlignment = .left
         buttonLabel.numberOfLines = 2
         buttonLabel.font = UIFont.systemFont(ofSize: 24, weight: .semibold)
-        buttonLabel.backgroundColor = UIColor(red: 169/255, green: 169/255, blue: 169/255, alpha: 0.8)
+        buttonLabel.backgroundColor = UIColor(red: 169/255, green: 169/255, blue: 169/255, alpha: 1)
         buttonLabel.layer.cornerRadius = 18
         buttonLabel.clipsToBounds = true
         buttonLabel.translatesAutoresizingMaskIntoConstraints = false
