@@ -78,16 +78,17 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
     
     private func setupQRScannerButton() {
         qrButton.setImage(UIImage(systemName: "qrcode.viewfinder"), for: .normal)
+        qrButton.imageView?.sizeToFit()
         qrButton.tintColor = .white
         qrButton.backgroundColor = .darkGray
-        qrButton.layer.cornerRadius = 27.5
+        qrButton.layer.cornerRadius = 25
         qrButton.clipsToBounds = true
         qrButton.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(qrButton)
         
         NSLayoutConstraint.activate([
-            qrButton.widthAnchor.constraint(equalToConstant: 55),
-            qrButton.heightAnchor.constraint(equalToConstant: 55),
+            qrButton.widthAnchor.constraint(equalToConstant: 50),
+            qrButton.heightAnchor.constraint(equalToConstant: 50),
             qrButton.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 60),
             qrButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -30)
         ])

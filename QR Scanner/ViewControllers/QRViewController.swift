@@ -22,6 +22,8 @@ class QRViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate
         
         upperLabel()
         lowerLabel()
+        addCloseButton()
+        
         self.hidesBottomBarWhenPushed = false
 
         captureSession = AVCaptureSession()
@@ -210,5 +212,21 @@ class QRViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate
             bottomLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
         ])
     }
-
+    
+    func addCloseButton() {
+        let closeButton = UIButton(type: .system)
+        closeButton.setImage(UIImage(systemName: "xmark"), for: .normal) // Use SF Symbol for the cross icon
+        closeButton.tintColor = .white
+        closeButton.translatesAutoresizingMaskIntoConstraints = false
+        closeButton.addTarget(self, action: #selector(dismissViewController), for: .touchUpInside)
+        
+        view.addSubview(closeButton)
+        
+        NSLayoutConstraint.activate([
+            closeButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
+            closeButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            closeButton.widthAnchor.constraint(equalToConstant: 30),
+            closeButton.heightAnchor.constraint(equalToConstant: 30)
+        ])
+    }
 }
