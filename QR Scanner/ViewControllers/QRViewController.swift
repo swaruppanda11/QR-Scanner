@@ -209,7 +209,7 @@ class QRViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate
         
         NSLayoutConstraint.activate([
             bottomLabel.topAnchor.constraint(equalTo: topLabel.bottomAnchor, constant: 10),
-            bottomLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            bottomLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 15),
         ])
     }
     

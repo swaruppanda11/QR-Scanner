@@ -22,7 +22,7 @@ class HorizontalButtonCell: UICollectionViewCell {
         super.init(frame: frame)
         contentView.addSubview(buttonLabel)
         
-        contentView.backgroundColor = UIColor(red: 35/255, green: 45/255, blue: 60/255, alpha: 1.0) 
+        contentView.backgroundColor = UIColor(red: 35/255, green: 45/255, blue: 60/255, alpha: 1.0)
         contentView.layer.cornerRadius = 22.5
         contentView.clipsToBounds = true
         contentView.layer.borderColor = UIColor(red: 1.0, green: 1.0, blue: 0.5, alpha: 1.0).cgColor
@@ -38,7 +38,18 @@ class HorizontalButtonCell: UICollectionViewCell {
     
     required init?(coder: NSCoder) { nil }
     
-    func configure(with title: String) {
+    func configure(with title: String, isSelected: Bool) {
         buttonLabel.text = title
+        
+        if isSelected {
+            contentView.backgroundColor = .white
+            buttonLabel.textColor = .black
+            contentView.layer.borderColor = UIColor.clear.cgColor
+        } else {
+            contentView.backgroundColor = UIColor(red: 35/255, green: 45/255, blue: 60/255, alpha: 1.0)
+            buttonLabel.textColor = .white
+            contentView.layer.borderColor = UIColor(red: 1.0, green: 1.0, blue: 0.5, alpha: 1.0).cgColor
+        }
     }
 }
+

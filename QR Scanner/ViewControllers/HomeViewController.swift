@@ -17,17 +17,25 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
     
     private var collectionView: UICollectionView!
     private let buttonTitles = ["AR", "CGI", "Web Apps", "AI"]
+    private var selectedIndex: IndexPath?
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         self.navigationController?.setNavigationBarHidden(true, animated: false)
         view.backgroundColor = .black
+        
         setupScrollView()
         setupContentView()
-        companyLabel()
+        setupCompanyLabel()
         setupQRScannerButton()
-        horizontalScrollView()
-        setupImageViews()
+        setupHorizontalScrollView()
+        
+        // Set AR button as selected by default
+        let defaultIndex = IndexPath(item: 0, section: 0) // AR button is at index 0
+        selectedIndex = defaultIndex
+        collectionView.selectItem(at: defaultIndex, animated: false, scrollPosition: .centeredHorizontally)
+        collectionView.reloadData()
     }
     
     func setupScrollView() {
@@ -55,7 +63,7 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
         ])
     }
     
-    private func companyLabel() {
+    private func setupCompanyLabel() {
         let text = "Effectization\nStudio"
         let attributedText = NSMutableAttributedString(string: text)
         let lightYellow = UIColor(red: 1.0, green: 1.0, blue: 0.5, alpha: 1.0)
@@ -78,9 +86,8 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
     
     private func setupQRScannerButton() {
         qrButton.setImage(UIImage(systemName: "qrcode.viewfinder"), for: .normal)
-        qrButton.imageView?.sizeToFit()
         qrButton.tintColor = .white
-        qrButton.backgroundColor = .darkGray
+        qrButton.backgroundColor = UIColor(red: 35/255, green: 45/255, blue: 60/255, alpha: 1.0)
         qrButton.layer.cornerRadius = 25
         qrButton.clipsToBounds = true
         qrButton.translatesAutoresizingMaskIntoConstraints = false
@@ -101,7 +108,7 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
         present(qrViewController, animated: true)
     }
     
-    private func horizontalScrollView() {
+    private func setupHorizontalScrollView() {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
         layout.minimumLineSpacing = 16
@@ -122,63 +129,11 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
             collectionView.topAnchor.constraint(equalTo: companyName.bottomAnchor, constant: 20),
             collectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             collectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            collectionView.heightAnchor.constraint(equalToConstant: 50)
+            collectionView.heightAnchor.constraint(equalToConstant: 50),
+            collectionView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20)
         ])
     }
     
-    private func addImageView(with urlString: String, below anchor: NSLayoutYAxisAnchor?) -> UIImageView {
-        let imageView = UIImageView()
-        imageView.contentMode = .scaleAspectFill
-        imageView.layer.cornerRadius = 45
-        imageView.clipsToBounds = true
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        
-        contentView.addSubview(imageView)
-        
-        if let url = URL(string: urlString) {
-            DispatchQueue.global().async {
-                if let data = try? Data(contentsOf: url), let image = UIImage(data: data) {
-                    DispatchQueue.main.async {
-                        imageView.image = image
-                    }
-                }
-            }
-        }
-        
-        NSLayoutConstraint.activate([
-            imageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 15),
-            imageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -15),
-            imageView.heightAnchor.constraint(equalToConstant: 500)
-        ])
-        
-        if let anchor = anchor {
-            imageView.topAnchor.constraint(equalTo: anchor, constant: 20).isActive = true
-        } else {
-            imageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20).isActive = true
-        }
-        
-        return imageView
-    }
-    
-    private func setupImageViews() {
-        var lastAnchor: NSLayoutYAxisAnchor? = collectionView.bottomAnchor
-        
-        let imageUrls = [
-            "https://raw.githubusercontent.com/adibkn1/FlappyBird/refs/heads/main/1.png",
-            "https://raw.githubusercontent.com/adibkn1/FlappyBird/refs/heads/main/2.png",
-            "https://raw.githubusercontent.com/adibkn1/FlappyBird/refs/heads/main/3.png",
-            "https://raw.githubusercontent.com/adibkn1/FlappyBird/refs/heads/main/4.png"
-        ]
-        
-        for url in imageUrls {
-            let imageView = addImageView(with: url, below: lastAnchor)
-            lastAnchor = imageView.bottomAnchor
-        }
-        
-        if let lastAnchor = lastAnchor {
-            contentView.bottomAnchor.constraint(equalTo: lastAnchor, constant: 30).isActive = true
-        }
-    }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return buttonTitles.count
@@ -186,7 +141,7 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "HorizontalButtonCell", for: indexPath) as! HorizontalButtonCell
-        cell.configure(with: buttonTitles[indexPath.item])
+        cell.configure(with: buttonTitles[indexPath.item], isSelected: indexPath == selectedIndex)
         return cell
     }
     
@@ -197,6 +152,10 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        if selectedIndex != indexPath {
+            selectedIndex = indexPath
+            collectionView.reloadData()
+        }
         print("\(buttonTitles[indexPath.item]) tapped")
     }
 }
