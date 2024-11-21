@@ -205,16 +205,17 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
         imageView.layer.cornerRadius = 30
         imageView.clipsToBounds = true
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        
         imageView.image = UIImage(systemName: "photo.fill")
         imageView.tintColor = .gray
         
         let infoButton = UIButton(type: .system)
         infoButton.setImage(UIImage(systemName: "chevron.forward"), for: .normal)
-        infoButton.tintColor = UIColor.black
+        infoButton.tintColor = .black
         infoButton.backgroundColor = UIColor(red: 1.0, green: 1.0, blue: 0.5, alpha: 1)
         infoButton.layer.cornerRadius = 30
         infoButton.translatesAutoresizingMaskIntoConstraints = false
+        infoButton.accessibilityLabel = "Open more options"
+        infoButton.addTarget(self, action: #selector(openWikipediaLink), for: .touchUpInside)
         
         let buttonLabel = UILabel()
         buttonLabel.text = "Make Up TryOn"
@@ -222,49 +223,51 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
         buttonLabel.textAlignment = .left
         buttonLabel.numberOfLines = 2
         buttonLabel.font = UIFont.systemFont(ofSize: 30, weight: .semibold)
-        buttonLabel.clipsToBounds = true
         buttonLabel.translatesAutoresizingMaskIntoConstraints = false
+        buttonLabel.adjustsFontForContentSizeCategory = true
+        buttonLabel.accessibilityLabel = "Make Up TryOn description"
         
         let imageTitle = UILabel()
-        imageTitle.text = "Snapchat Filters  "
+        imageTitle.text = "Snapchat Filters"
         imageTitle.textColor = UIColor(red: 1.0, green: 1.0, blue: 0.5, alpha: 1)
         imageTitle.textAlignment = .center
         imageTitle.numberOfLines = 2
         imageTitle.font = UIFont.systemFont(ofSize: 19, weight: .semibold)
-        imageTitle.clipsToBounds = true
         imageTitle.translatesAutoresizingMaskIntoConstraints = false
+        imageTitle.adjustsFontForContentSizeCategory = true
+        imageTitle.accessibilityLabel = "Snapchat Filters"
         
-        let blurEffect = UIBlurEffect(style: .systemThinMaterial)
-        let blurredView = UIVisualEffectView(effect: blurEffect)
+        let blurredView = UIVisualEffectView(effect: UIBlurEffect(style: .systemUltraThinMaterialDark))
         blurredView.translatesAutoresizingMaskIntoConstraints = false
-        blurredView.layer.cornerRadius = 30 // Set desired corner radius
+        blurredView.backgroundColor = UIColor(white: 0.5, alpha: 0.01)
+        blurredView.layer.cornerRadius = 25
         blurredView.clipsToBounds = true
         
-        let gradientLayer = CAGradientLayer()
-        gradientLayer.frame = blurredView.bounds
-        gradientLayer.colors = [
-            UIColor(red: 1, green: 1, blue: 1, alpha: 0.7).cgColor,
-            UIColor(red: 0.9, green: 0.9, blue: 0.9, alpha: 0.7).cgColor
-        ]
-        gradientLayer.startPoint = CGPoint(x: 0.0, y: 0.0)
-        gradientLayer.endPoint = CGPoint(x: 1.0, y: 1.0)
-        blurredView.layer.insertSublayer(gradientLayer, at: 0)
+        blurredView.layer.shadowColor = UIColor.black.cgColor
+        blurredView.layer.shadowOpacity = 0.3
+        blurredView.layer.shadowOffset = CGSize(width: 0, height: 5)
+        blurredView.layer.shadowRadius = 10
         
-        infoButton.addTarget(self, action: #selector(openWikipediaLink), for: .touchUpInside)
+        let overlayView = UIView()
+        overlayView.translatesAutoresizingMaskIntoConstraints = false
+        overlayView.backgroundColor = UIColor(white: 15, alpha: 0.01) 
+        overlayView.layer.cornerRadius = 25
+        overlayView.clipsToBounds = true
         
-        blurredView.contentView.addSubview(imageTitle)
+        // Add overlay to blurred view
+        blurredView.contentView.addSubview(overlayView)
         
         containerView.addSubview(imageView)
         containerView.addSubview(infoButton)
         containerView.addSubview(buttonLabel)
+        blurredView.contentView.addSubview(imageTitle)
         containerView.addSubview(blurredView)
-        
         
         NSLayoutConstraint.activate([
             imageView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 15),
             imageView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -15),
-            imageView.topAnchor.constraint(equalTo: anchor ?? containerView.topAnchor, constant: 20),
             imageView.heightAnchor.constraint(equalToConstant: 500),
+            imageView.topAnchor.constraint(equalTo: anchor ?? containerView.topAnchor, constant: 20),
             
             infoButton.widthAnchor.constraint(equalToConstant: 60),
             infoButton.heightAnchor.constraint(equalToConstant: 60),
@@ -275,38 +278,43 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
             buttonLabel.leadingAnchor.constraint(equalTo: imageView.leadingAnchor, constant: 20),
             buttonLabel.heightAnchor.constraint(equalToConstant: 50),
             
+            blurredView.topAnchor.constraint(equalTo: imageView.topAnchor, constant: 27),
+            blurredView.centerXAnchor.constraint(equalTo: imageView.centerXAnchor),
+            blurredView.widthAnchor.constraint(equalTo: imageView.widthAnchor, multiplier: 0.5),
+            blurredView.heightAnchor.constraint(greaterThanOrEqualToConstant: 55),
+            blurredView.leadingAnchor.constraint(equalTo: imageView.leadingAnchor, constant: 20),
+            
+            overlayView.topAnchor.constraint(equalTo: blurredView.contentView.topAnchor),
+            overlayView.leadingAnchor.constraint(equalTo: blurredView.contentView.leadingAnchor),
+            overlayView.trailingAnchor.constraint(equalTo: blurredView.contentView.trailingAnchor),
+            overlayView.bottomAnchor.constraint(equalTo: blurredView.contentView.bottomAnchor),
+            
             imageTitle.centerXAnchor.constraint(equalTo: blurredView.centerXAnchor),
             imageTitle.centerYAnchor.constraint(equalTo: blurredView.centerYAnchor),
-            imageTitle.leadingAnchor.constraint(equalTo: blurredView.leadingAnchor, constant: 20),
-            imageTitle.trailingAnchor.constraint(equalTo: blurredView.trailingAnchor, constant: -20),
-            
-            blurredView.topAnchor.constraint(equalTo: imageView.topAnchor, constant: 27),
-            blurredView.leadingAnchor.constraint(equalTo: imageView.leadingAnchor, constant: 20),
-            blurredView.trailingAnchor.constraint(equalTo: imageTitle.trailingAnchor),
-            blurredView.bottomAnchor.constraint(equalTo: imageTitle.bottomAnchor),
-            blurredView.heightAnchor.constraint(equalToConstant: 60)
+            imageTitle.leadingAnchor.constraint(equalTo: blurredView.leadingAnchor, constant: 10),
+            imageTitle.trailingAnchor.constraint(equalTo: blurredView.trailingAnchor, constant: -10)
         ])
         
-        if let anchor = anchor {
-            imageView.topAnchor.constraint(equalTo: anchor, constant: 20).isActive = true
-        } else {
-            imageView.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 20).isActive = true
-        }
         
         if let cachedImage = imageCache.object(forKey: urlString as NSString) {
-            imageView.image = cachedImage
+            DispatchQueue.main.async {
+                imageView.image = cachedImage
+            }
             return imageView
         }
         
         guard let url = URL(string: urlString) else { return imageView }
         
-        URLSession.shared.dataTask(with: url) { [weak self] (data, response, error) in
-            guard let data = data,
-                  let image = UIImage(data: data),
-                  error == nil else { return }
-            
+        URLSession.shared.dataTask(with: url) { [weak self] (data, _, error) in
+            if let error = error {
+                print("Image download error: \(error.localizedDescription)")
+                return
+            }
+            guard let data = data, let image = UIImage(data: data) else {
+                print("Invalid image data")
+                return
+            }
             self?.imageCache.setObject(image, forKey: urlString as NSString)
-            
             DispatchQueue.main.async {
                 imageView.image = image
             }
@@ -314,6 +322,7 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
         
         return imageView
     }
+    
     
     @objc private func openWikipediaLink() {
         guard let url = URL(string: "https://en.wikipedia.org/wiki/Augmented_reality") else { return }
