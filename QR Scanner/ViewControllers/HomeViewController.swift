@@ -217,21 +217,48 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
         infoButton.translatesAutoresizingMaskIntoConstraints = false
         
         let buttonLabel = UILabel()
-        buttonLabel.text = "  Instagram Filters  "
+        buttonLabel.text = "Make Up TryOn"
         buttonLabel.textColor = .white
         buttonLabel.textAlignment = .left
         buttonLabel.numberOfLines = 2
         buttonLabel.font = UIFont.systemFont(ofSize: 30, weight: .semibold)
         buttonLabel.clipsToBounds = true
         buttonLabel.translatesAutoresizingMaskIntoConstraints = false
-
+        
+        let imageTitle = UILabel()
+        imageTitle.text = "Snapchat Filters  "
+        imageTitle.textColor = UIColor(red: 1.0, green: 1.0, blue: 0.5, alpha: 1)
+        imageTitle.textAlignment = .center
+        imageTitle.numberOfLines = 2
+        imageTitle.font = UIFont.systemFont(ofSize: 19, weight: .semibold)
+        imageTitle.clipsToBounds = true
+        imageTitle.translatesAutoresizingMaskIntoConstraints = false
+        
+        let blurEffect = UIBlurEffect(style: .systemThinMaterial)
+        let blurredView = UIVisualEffectView(effect: blurEffect)
+        blurredView.translatesAutoresizingMaskIntoConstraints = false
+        blurredView.layer.cornerRadius = 30 // Set desired corner radius
+        blurredView.clipsToBounds = true
+        
+        let gradientLayer = CAGradientLayer()
+        gradientLayer.frame = blurredView.bounds
+        gradientLayer.colors = [
+            UIColor(red: 1, green: 1, blue: 1, alpha: 0.7).cgColor,
+            UIColor(red: 0.9, green: 0.9, blue: 0.9, alpha: 0.7).cgColor
+        ]
+        gradientLayer.startPoint = CGPoint(x: 0.0, y: 0.0)
+        gradientLayer.endPoint = CGPoint(x: 1.0, y: 1.0)
+        blurredView.layer.insertSublayer(gradientLayer, at: 0)
         
         infoButton.addTarget(self, action: #selector(openWikipediaLink), for: .touchUpInside)
+        
+        blurredView.contentView.addSubview(imageTitle)
         
         containerView.addSubview(imageView)
         containerView.addSubview(infoButton)
         containerView.addSubview(buttonLabel)
-
+        containerView.addSubview(blurredView)
+        
         
         NSLayoutConstraint.activate([
             imageView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 15),
@@ -246,7 +273,18 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
             
             buttonLabel.bottomAnchor.constraint(equalTo: imageView.bottomAnchor, constant: -25),
             buttonLabel.leadingAnchor.constraint(equalTo: imageView.leadingAnchor, constant: 20),
-            buttonLabel.heightAnchor.constraint(equalToConstant: 50)
+            buttonLabel.heightAnchor.constraint(equalToConstant: 50),
+            
+            imageTitle.centerXAnchor.constraint(equalTo: blurredView.centerXAnchor),
+            imageTitle.centerYAnchor.constraint(equalTo: blurredView.centerYAnchor),
+            imageTitle.leadingAnchor.constraint(equalTo: blurredView.leadingAnchor, constant: 20),
+            imageTitle.trailingAnchor.constraint(equalTo: blurredView.trailingAnchor, constant: -20),
+            
+            blurredView.topAnchor.constraint(equalTo: imageView.topAnchor, constant: 27),
+            blurredView.leadingAnchor.constraint(equalTo: imageView.leadingAnchor, constant: 20),
+            blurredView.trailingAnchor.constraint(equalTo: imageTitle.trailingAnchor),
+            blurredView.bottomAnchor.constraint(equalTo: imageTitle.bottomAnchor),
+            blurredView.heightAnchor.constraint(equalToConstant: 60)
         ])
         
         if let anchor = anchor {
