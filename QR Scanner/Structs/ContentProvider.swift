@@ -8,7 +8,6 @@
 import Foundation
 
 protocol ContentProvider {
-    func getContent(for category: String) -> [ImageViewContent]?
     func getAllCategories() -> [String]
 }
 
@@ -18,6 +17,6 @@ class DefaultContentProvider: ContentProvider {
     }
     
     func getAllCategories() -> [String] {
-        return Array(ContentConfiguration.contentForButtons.keys)
-    }
+            return ContentConfiguration.categoryOrder
+        }
 }

@@ -36,33 +36,6 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
     
     private let imageCache = NSCache<NSString, UIImage>()
     
-    private let imageUrlsForButtons: [String: [String]] = [
-        "AR": [
-            "https://raw.githubusercontent.com/adibkn1/FlappyBird/refs/heads/main/1.png",
-            "https://raw.githubusercontent.com/adibkn1/FlappyBird/refs/heads/main/2.png",
-            "https://raw.githubusercontent.com/adibkn1/FlappyBird/refs/heads/main/3.png",
-            "https://raw.githubusercontent.com/adibkn1/FlappyBird/refs/heads/main/4.png"
-        ],
-        "CGI": [
-            "https://raw.githubusercontent.com/adibkn1/FlappyBird/refs/heads/main/2.png",
-            "https://raw.githubusercontent.com/adibkn1/FlappyBird/refs/heads/main/2.png",
-            "https://raw.githubusercontent.com/adibkn1/FlappyBird/refs/heads/main/3.png",
-            "https://raw.githubusercontent.com/adibkn1/FlappyBird/refs/heads/main/4.png"
-        ],
-        "Web Apps": [
-            "https://raw.githubusercontent.com/adibkn1/FlappyBird/refs/heads/main/3.png",
-            "https://raw.githubusercontent.com/adibkn1/FlappyBird/refs/heads/main/2.png",
-            "https://raw.githubusercontent.com/adibkn1/FlappyBird/refs/heads/main/3.png",
-            "https://raw.githubusercontent.com/adibkn1/FlappyBird/refs/heads/main/4.png"
-        ],
-        "AI": [
-            "https://raw.githubusercontent.com/adibkn1/FlappyBird/refs/heads/main/4.png",
-            "https://raw.githubusercontent.com/adibkn1/FlappyBird/refs/heads/main/2.png",
-            "https://raw.githubusercontent.com/adibkn1/FlappyBird/refs/heads/main/3.png",
-            "https://raw.githubusercontent.com/adibkn1/FlappyBird/refs/heads/main/4.png"
-        ]
-    ]
-    
     private var imageContainerView: UIView!
     private var imageViews: [UIImageView] = []
     
@@ -230,18 +203,10 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
         infoButton.layer.cornerRadius = 30
         infoButton.translatesAutoresizingMaskIntoConstraints = false
         infoButton.accessibilityLabel = "Open more options"
-        infoButton.addTarget(self, action: #selector(openWikipediaLink(_:)), for: .touchUpInside)
-        infoButton.tag = imageViews.count
         
-        let buttonLabel = UILabel()
-        buttonLabel.text = content.mainTitle
-        buttonLabel.textColor = .white
-        buttonLabel.textAlignment = .left
-        buttonLabel.numberOfLines = 2
-        buttonLabel.font = UIFont.systemFont(ofSize: 30, weight: .semibold)
-        buttonLabel.translatesAutoresizingMaskIntoConstraints = false
-        buttonLabel.adjustsFontForContentSizeCategory = true
-        buttonLabel.accessibilityLabel = "Make Up TryOn description"
+        let urlKey = UnsafeRawPointer(bitPattern: "linkUrl".hashValue)!
+        infoButton.setAssociatedObject(content.linkUrl, forKey: urlKey)
+        infoButton.addTarget(self, action: #selector(openWikipediaLink(_:)), for: .touchUpInside)
         
         let imageTitle = UILabel()
         imageTitle.text = content.topTitle
@@ -251,10 +216,7 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
         imageTitle.font = UIFont.systemFont(ofSize: 19, weight: .semibold)
         imageTitle.translatesAutoresizingMaskIntoConstraints = false
         imageTitle.adjustsFontForContentSizeCategory = true
-        imageTitle.accessibilityLabel = "Snapchat Filters"
-        
-        let key = UnsafeRawPointer(bitPattern: "linkUrl".hashValue)!
-        infoButton.setAssociatedObject(content.linkUrl, forKey: key)
+        imageTitle.accessibilityLabel = content.topTitle
         
         let blurredView = UIVisualEffectView(effect: UIBlurEffect(style: .systemUltraThinMaterialDark))
         blurredView.translatesAutoresizingMaskIntoConstraints = false
@@ -273,12 +235,10 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
         overlayView.layer.cornerRadius = 25
         overlayView.clipsToBounds = true
         
-        // Add overlay to blurred view
         blurredView.contentView.addSubview(overlayView)
         
         containerView.addSubview(imageView)
         containerView.addSubview(infoButton)
-        containerView.addSubview(buttonLabel)
         blurredView.contentView.addSubview(imageTitle)
         containerView.addSubview(blurredView)
         
@@ -293,15 +253,10 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
             infoButton.bottomAnchor.constraint(equalTo: imageView.bottomAnchor, constant: -20),
             infoButton.trailingAnchor.constraint(equalTo: imageView.trailingAnchor, constant: -20),
             
-            buttonLabel.bottomAnchor.constraint(equalTo: imageView.bottomAnchor, constant: -25),
-            buttonLabel.leadingAnchor.constraint(equalTo: imageView.leadingAnchor, constant: 20),
-            buttonLabel.heightAnchor.constraint(equalToConstant: 50),
-            
-            blurredView.topAnchor.constraint(equalTo: imageView.topAnchor, constant: 27),
-            blurredView.centerXAnchor.constraint(equalTo: imageView.centerXAnchor),
+            blurredView.bottomAnchor.constraint(equalTo: imageView.bottomAnchor, constant: -25),
+            blurredView.leadingAnchor.constraint(equalTo: imageView.leadingAnchor, constant: 20),
             blurredView.widthAnchor.constraint(equalTo: imageView.widthAnchor, multiplier: 0.5),
             blurredView.heightAnchor.constraint(greaterThanOrEqualToConstant: 55),
-            blurredView.leadingAnchor.constraint(equalTo: imageView.leadingAnchor, constant: 20),
             
             overlayView.topAnchor.constraint(equalTo: blurredView.contentView.topAnchor),
             overlayView.leadingAnchor.constraint(equalTo: blurredView.contentView.leadingAnchor),
@@ -313,7 +268,6 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
             imageTitle.leadingAnchor.constraint(equalTo: blurredView.leadingAnchor, constant: 10),
             imageTitle.trailingAnchor.constraint(equalTo: blurredView.trailingAnchor, constant: -10)
         ])
-        
         
         if let cachedImage = imageCache.object(forKey: content.imageUrl as NSString) {
             DispatchQueue.main.async {

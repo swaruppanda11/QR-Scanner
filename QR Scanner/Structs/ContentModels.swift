@@ -9,7 +9,6 @@ import Foundation
 
 struct ImageViewContent {
     let imageUrl: String
-    let mainTitle: String
     let topTitle: String
     let linkUrl: String
 }
