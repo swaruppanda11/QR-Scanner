@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		A9509ECF2CEC8F5100AD02D3 /* HorizontalButtonCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9509ECE2CEC8F5100AD02D3 /* HorizontalButtonCell.swift */; };
+		A95BA02A2CF23303001F09E7 /* ContentModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = A95BA0292CF23303001F09E7 /* ContentModels.swift */; };
+		A95BA02C2CF23523001F09E7 /* ContentConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = A95BA02B2CF23523001F09E7 /* ContentConfiguration.swift */; };
+		A95BA02E2CF23604001F09E7 /* ContentProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = A95BA02D2CF23604001F09E7 /* ContentProvider.swift */; };
 		A99B6F4A2CB002850055CFC4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A99B6F492CB002850055CFC4 /* AppDelegate.swift */; };
 		A99B6F4C2CB002850055CFC4 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A99B6F4B2CB002850055CFC4 /* SceneDelegate.swift */; };
 		A99B6F512CB002850055CFC4 /* Base in Resources */ = {isa = PBXBuildFile; fileRef = A99B6F502CB002850055CFC4 /* Base */; };
@@ -24,6 +27,9 @@
 
 /* Begin PBXFileReference section */
 		A9509ECE2CEC8F5100AD02D3 /* HorizontalButtonCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HorizontalButtonCell.swift; sourceTree = "<group>"; };
+		A95BA0292CF23303001F09E7 /* ContentModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentModels.swift; sourceTree = "<group>"; };
+		A95BA02B2CF23523001F09E7 /* ContentConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentConfiguration.swift; sourceTree = "<group>"; };
+		A95BA02D2CF23604001F09E7 /* ContentProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentProvider.swift; sourceTree = "<group>"; };
 		A99B6F462CB002850055CFC4 /* QR Scanner.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "QR Scanner.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A99B6F492CB002850055CFC4 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A99B6F4B2CB002850055CFC4 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -51,6 +57,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		A95BA0282CF232EF001F09E7 /* Structs */ = {
+			isa = PBXGroup;
+			children = (
+				A95BA0292CF23303001F09E7 /* ContentModels.swift */,
+				A95BA02B2CF23523001F09E7 /* ContentConfiguration.swift */,
+				A95BA02D2CF23604001F09E7 /* ContentProvider.swift */,
+			);
+			path = Structs;
+			sourceTree = "<group>";
+		};
 		A99B6F3D2CB002850055CFC4 = {
 			isa = PBXGroup;
 			children = (
@@ -70,6 +86,7 @@
 		A99B6F482CB002850055CFC4 /* QR Scanner */ = {
 			isa = PBXGroup;
 			children = (
+				A95BA0282CF232EF001F09E7 /* Structs */,
 				A99B6F6B2CB131520055CFC4 /* Views */,
 				A99B6F682CB00B250055CFC4 /* CustomView */,
 				A99B6F602CB008540055CFC4 /* TabBar */,
@@ -191,12 +208,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A95BA02C2CF23523001F09E7 /* ContentConfiguration.swift in Sources */,
 				A99B6F712CB136DF0055CFC4 /* SeparatorView.swift in Sources */,
 				A9509ECF2CEC8F5100AD02D3 /* HorizontalButtonCell.swift in Sources */,
 				A99B6F622CB008880055CFC4 /* HomeViewController.swift in Sources */,
 				A99B6F6F2CB135D60055CFC4 /* FeatureRowView.swift in Sources */,
 				A99B6F672CB0090E0055CFC4 /* FormViewController.swift in Sources */,
 				A99B6F4A2CB002850055CFC4 /* AppDelegate.swift in Sources */,
+				A95BA02E2CF23604001F09E7 /* ContentProvider.swift in Sources */,
+				A95BA02A2CF23303001F09E7 /* ContentModels.swift in Sources */,
 				A99B6F6A2CB00B510055CFC4 /* CustomTabBar.swift in Sources */,
 				A99B6F5E2CB004500055CFC4 /* TabBarController.swift in Sources */,
 				A99B6F4C2CB002850055CFC4 /* SceneDelegate.swift in Sources */,

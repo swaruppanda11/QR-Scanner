@@ -9,6 +9,22 @@ import UIKit
 
 class HomeViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     
+    private let contentProvider: ContentProvider
+    
+    init(contentProvider: ContentProvider = DefaultContentProvider()) {
+        self.contentProvider = contentProvider
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        self.contentProvider = DefaultContentProvider()
+        super.init(coder: coder)
+    }
+    
+    private var buttonTitles: [String] {
+        return contentProvider.getAllCategories()
+    }
+    
     let scrollView = UIScrollView()
     let contentView = UIView()
     
@@ -16,7 +32,6 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
     let qrButton = UIButton()
     
     private var collectionView: UICollectionView!
-    private let buttonTitles = ["AR", "CGI", "Web Apps", "AI"]
     private var selectedIndex: IndexPath?
     
     private let imageCache = NSCache<NSString, UIImage>()
@@ -183,12 +198,12 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
         imageContainerView.subviews.forEach { $0.removeFromSuperview() }
         imageViews.removeAll()
         
-        guard let imageUrls = imageUrlsForButtons[category] else { return }
+        guard let contents = ContentConfiguration.contentForButtons[category] else { return }
         
         var lastAnchor: NSLayoutYAxisAnchor? = imageContainerView.topAnchor
         
-        for url in imageUrls {
-            let imageView = addImageView(with: url, below: lastAnchor, in: imageContainerView)
+        for content in contents {
+            let imageView = addImageView(with: content, below: lastAnchor, in: imageContainerView)
             imageViews.append(imageView)
             lastAnchor = imageView.bottomAnchor
         }
@@ -199,7 +214,7 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
         }
     }
     
-    private func addImageView(with urlString: String, below anchor: NSLayoutYAxisAnchor?, in containerView: UIView) -> UIImageView {
+    private func addImageView(with content: ImageViewContent, below anchor: NSLayoutYAxisAnchor?, in containerView: UIView) -> UIImageView {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
         imageView.layer.cornerRadius = 30
@@ -215,10 +230,11 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
         infoButton.layer.cornerRadius = 30
         infoButton.translatesAutoresizingMaskIntoConstraints = false
         infoButton.accessibilityLabel = "Open more options"
-        infoButton.addTarget(self, action: #selector(openWikipediaLink), for: .touchUpInside)
+        infoButton.addTarget(self, action: #selector(openWikipediaLink(_:)), for: .touchUpInside)
+        infoButton.tag = imageViews.count
         
         let buttonLabel = UILabel()
-        buttonLabel.text = "Make Up TryOn"
+        buttonLabel.text = content.mainTitle
         buttonLabel.textColor = .white
         buttonLabel.textAlignment = .left
         buttonLabel.numberOfLines = 2
@@ -228,7 +244,7 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
         buttonLabel.accessibilityLabel = "Make Up TryOn description"
         
         let imageTitle = UILabel()
-        imageTitle.text = "Snapchat Filters"
+        imageTitle.text = content.topTitle
         imageTitle.textColor = UIColor(red: 1.0, green: 1.0, blue: 0.5, alpha: 1)
         imageTitle.textAlignment = .center
         imageTitle.numberOfLines = 2
@@ -236,6 +252,9 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
         imageTitle.translatesAutoresizingMaskIntoConstraints = false
         imageTitle.adjustsFontForContentSizeCategory = true
         imageTitle.accessibilityLabel = "Snapchat Filters"
+        
+        let key = UnsafeRawPointer(bitPattern: "linkUrl".hashValue)!
+        infoButton.setAssociatedObject(content.linkUrl, forKey: key)
         
         let blurredView = UIVisualEffectView(effect: UIBlurEffect(style: .systemUltraThinMaterialDark))
         blurredView.translatesAutoresizingMaskIntoConstraints = false
@@ -250,7 +269,7 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
         
         let overlayView = UIView()
         overlayView.translatesAutoresizingMaskIntoConstraints = false
-        overlayView.backgroundColor = UIColor(white: 15, alpha: 0.01) 
+        overlayView.backgroundColor = UIColor(white: 15, alpha: 0.01)
         overlayView.layer.cornerRadius = 25
         overlayView.clipsToBounds = true
         
@@ -296,14 +315,14 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
         ])
         
         
-        if let cachedImage = imageCache.object(forKey: urlString as NSString) {
+        if let cachedImage = imageCache.object(forKey: content.imageUrl as NSString) {
             DispatchQueue.main.async {
                 imageView.image = cachedImage
             }
             return imageView
         }
         
-        guard let url = URL(string: urlString) else { return imageView }
+        guard let url = URL(string: content.imageUrl) else { return imageView }
         
         URLSession.shared.dataTask(with: url) { [weak self] (data, _, error) in
             if let error = error {
@@ -314,7 +333,7 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
                 print("Invalid image data")
                 return
             }
-            self?.imageCache.setObject(image, forKey: urlString as NSString)
+            self?.imageCache.setObject(image, forKey: content.imageUrl as NSString)
             DispatchQueue.main.async {
                 imageView.image = image
             }
@@ -324,8 +343,10 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
     }
     
     
-    @objc private func openWikipediaLink() {
-        guard let url = URL(string: "https://en.wikipedia.org/wiki/Augmented_reality") else { return }
+    @objc private func openWikipediaLink(_ sender: UIButton) {
+        let key = UnsafeRawPointer(bitPattern: "linkUrl".hashValue)!
+        guard let urlString = sender.getAssociatedObject(forKey: key) as? String,
+              let url = URL(string: urlString) else { return }
         
         if UIApplication.shared.canOpenURL(url) {
             UIApplication.shared.open(url, options: [:], completionHandler: nil)
@@ -368,5 +389,19 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
             collectionView.reloadData()
         }
         print("\(buttonTitles[indexPath.item]) tapped")
+    }
+}
+
+extension UIButton {
+    private struct AssociatedKeys {
+        static var linkUrlKey = "linkUrlKey"
+    }
+    
+    func setAssociatedObject(_ object: Any, forKey key: UnsafeRawPointer) {
+        objc_setAssociatedObject(self, key, object, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+    }
+    
+    func getAssociatedObject(forKey key: UnsafeRawPointer) -> Any? {
+        return objc_getAssociatedObject(self, key)
     }
 }
