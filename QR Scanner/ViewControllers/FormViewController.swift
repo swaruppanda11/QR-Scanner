@@ -96,7 +96,7 @@ class FormViewController: UIViewController, UITextFieldDelegate {
         contentView.addSubview(companyName)
         
         NSLayoutConstraint.activate([
-            companyName.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 70),
+            companyName.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 80),
             companyName.leadingAnchor.constraint(equalTo: logoImageView.trailingAnchor, constant: 20),
         ])
     }
@@ -120,7 +120,7 @@ class FormViewController: UIViewController, UITextFieldDelegate {
         let textFields = [nameTextField, emailTextField, companyTextField, inputTextField]
         let placeholders = ["Name", "Email", "Company", "Message"]
         let placeholderAttributes: [NSAttributedString.Key: Any] = [
-            .foregroundColor: UIColor.white  
+            .foregroundColor: UIColor.gray
         ]
         
         for (index, textField) in textFields.enumerated() {
