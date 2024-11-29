@@ -125,7 +125,8 @@ class HomeViewController: UIViewController, UICollectionViewDataSource, UICollec
     
     @objc private func didTapQRScanner() {
         let qrViewController = QRViewController()
-        present(qrViewController, animated: true)
+        qrViewController.modalPresentationStyle = .fullScreen
+        present(qrViewController, animated: true, completion: nil)
     }
     
     private func setupHorizontalScrollView() {
